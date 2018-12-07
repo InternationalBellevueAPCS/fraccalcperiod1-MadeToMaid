@@ -8,8 +8,14 @@ public class FracCalc {
     public static void main(String[] args) 
     {
     	Scanner console = new Scanner(System.in);
+    	System.out.print("Enter a fraction calculation, enter \"done\" to finish. ");
     	String input = console.nextLine();
-    	produceAnswer(input);
+    	while (!input.equals("done")) {
+    		produceAnswer(input);
+    		System.out.print("Enter a fraction calculation, enter \"done\" to finish. ");
+    		input = console.nextLine();
+    		
+    	}
         // TODO: Read the input from the user and call produceAnswer with an equation
         // Checkpoint 1: Create a Scanner, read one line of input, pass that input to produceAnswer, print the result.
         // Checkpoint 2: Accept user input multiple times.
@@ -27,10 +33,29 @@ public class FracCalc {
     	String firstNum = input.substring(0, input.indexOf(" "));
     	String operation = input.substring(input.indexOf(" ") + 1,input.indexOf(" ") + 2);
     	String secondNum = input.substring(input.indexOf(" ") + 3);
-    	System.out.println(firstNum);
-    	System.out.println(operation);
-    	System.out.println(secondNum);
-    	return secondNum;
+    	String whole;
+    	String numerator;
+    	String denominator;
+    	if ((secondNum.indexOf("_") != -1)) {
+    		whole = secondNum.substring(0, secondNum.indexOf("_"));
+    	} else if ((secondNum.indexOf("_") == -1) && (secondNum.indexOf("/") != -1)) {
+    		whole = "No Whole Number";
+    	} else {
+    		whole = secondNum;
+    	}
+    	if (secondNum.indexOf("/") != -1) {
+    		numerator = secondNum.substring(secondNum.indexOf("_") + 1,secondNum.indexOf("/"));
+        	denominator = secondNum.substring(secondNum.indexOf("/") + 1);
+    	} else {
+    		numerator = "No Numerator";
+    		denominator = "No Denominator";
+    	}
+    	
+    	System.out.println(whole);
+    	System.out.println(numerator);
+    	System.out.println(denominator);
+    	String output = "whole:" + whole + " numerator:" + numerator + " denomintator:" + denominator;
+    	return output;
         // TODO: Implement this function to produce the solution to the input
         // Checkpoint 1: Return the second operand.  Example "4/5 * 1_2/4" returns "1_2/4".
         // Checkpoint 2: Return the second operand as a string representing each part.
