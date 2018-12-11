@@ -11,7 +11,7 @@ public class FracCalc {
     	System.out.print("Enter a fraction calculation, enter \"done\" to finish. ");
     	String input = console.nextLine();
     	while (!input.equals("done")) {
-    		produceAnswer(input);
+    		System.out.println(produceAnswer(input));
     		System.out.print("Enter a fraction calculation, enter \"done\" to finish. ");
     		input = console.nextLine();
     		
@@ -33,33 +33,76 @@ public class FracCalc {
     	String firstNum = input.substring(0, input.indexOf(" "));
     	String operation = input.substring(input.indexOf(" ") + 1,input.indexOf(" ") + 2);
     	String secondNum = input.substring(input.indexOf(" ") + 3);
-    	String whole;
-    	String numerator;
-    	String denominator;
-    	if ((secondNum.indexOf("_") != -1)) {
-    		whole = secondNum.substring(0, secondNum.indexOf("_"));
-    	} else if ((secondNum.indexOf("_") == -1) && (secondNum.indexOf("/") != -1)) {
-    		whole = "No Whole Number";
+    	String firstWhole;
+    	String firstNumerator;
+    	String firstDenominator;
+    	String secondDenomintaor;
+    	String secondWhole;
+    	String secondNumerator;
+    	String secondDenominator;
+    	if ((firstNum.indexOf("_") != -1)) {
+    		firstWhole = firstNum.substring(0, firstNum.indexOf("_"));
+    	} else if ((firstNum.indexOf("_") == -1) && (firstNum.indexOf("/") != -1)) {
+    		firstWhole = "0";
     	} else {
-    		whole = secondNum;
+    		firstWhole = firstNum;
     	}
-    	if (secondNum.indexOf("/") != -1) {
-    		numerator = secondNum.substring(secondNum.indexOf("_") + 1,secondNum.indexOf("/"));
-        	denominator = secondNum.substring(secondNum.indexOf("/") + 1);
+    	if (firstNum.indexOf("/") != -1) {
+    		firstNumerator = firstNum.substring(firstNum.indexOf("_") + 1,firstNum.indexOf("/"));
+    		firstDenominator = firstNum.substring(firstNum.indexOf("/") + 1);
     	} else {
-    		numerator = "No Numerator";
-    		denominator = "No Denominator";
+    		firstNumerator = "0";
+    		firstDenominator = "1";
     	}
     	
-    	System.out.println(whole);
-    	System.out.println(numerator);
-    	System.out.println(denominator);
-    	String output = "whole:" + whole + " numerator:" + numerator + " denomintator:" + denominator;
-    	return output;
+    	if ((secondNum.indexOf("_") != -1)) {
+    		secondWhole = secondNum.substring(0, secondNum.indexOf("_"));
+    	} else if ((secondNum.indexOf("_") == -1) && (secondNum.indexOf("/") != -1)) {
+    		secondWhole = "0";
+    	} else {
+    		secondWhole = secondNum;
+    	}
+    	if (secondNum.indexOf("/") != -1) {
+    		secondNumerator = secondNum.substring(secondNum.indexOf("_") + 1,secondNum.indexOf("/"));
+        	secondDenominator = secondNum.substring(secondNum.indexOf("/") + 1);
+    	} else {
+    		secondNumerator = "0";
+    		secondDenominator = "1";
+    	}
+    	int outputWhole;
+    	int outputNumerator;
+    	int outputDenominator;
+    	if (operation.equals("*")) {
+    		int outputFirstNumerator = Integer.parseInt(firstWhole) * Integer.parseInt(firstDenominator) + Integer.parseInt(firstNumerator);
+    		int outputSecondNumerator = Integer.parseInt(secondWhole) * Integer.parseInt(secondDenominator) + Integer.parseInt(secondNumerator);
+    		outputNumerator = outputFirstNumerator * outputSecondNumerator;
+    		outputDenominator = Integer.parseInt(firstDenominator) * Integer.parseInt(secondDenominator);
+    		return Integer.toString(outputNumerator) + "/" + Integer.toString(outputDenominator);
+    	} else if (operation.equals("/")) {
+    		int outputFirstNumerator = Integer.parseInt(firstWhole) * Integer.parseInt(firstDenominator) + Integer.parseInt(firstNumerator);
+    		int outputSecondNumerator = Integer.parseInt(secondWhole) * Integer.parseInt(secondDenominator) + Integer.parseInt(secondNumerator);
+    		outputNumerator = outputFirstNumerator * Integer.parseInt(secondDenominator);
+    		outputDenominator = Integer.parseInt(firstDenominator) * outputSecondNumerator;
+    		return Integer.toString(outputNumerator) + "/" + Integer.toString(outputDenominator);
+    	} else if (operation.equals("+")) {
+    		int outputFirstNumerator = (Integer.parseInt(firstWhole) * Integer.parseInt(firstDenominator) + Integer.parseInt(firstNumerator)) * Integer.parseInt(secondDenominator);
+    		int outputSecondNumerator = (Integer.parseInt(secondWhole) * Integer.parseInt(secondDenominator) + Integer.parseInt(secondNumerator)) * Integer.parseInt(firstDenominator); 
+    		outputNumerator = outputFirstNumerator + outputSecondNumerator;
+    		outputDenominator = Integer.parseInt(secondDenominator) * Integer.parseInt(firstDenominator);
+    		return Integer.toString(outputNumerator) + "/" + Integer.toString(outputDenominator);
+    	} else {
+    		int outputFirstNumerator = (Integer.parseInt(firstWhole) * Integer.parseInt(firstDenominator) + Integer.parseInt(firstNumerator)) * Integer.parseInt(secondDenominator);
+    		int outputSecondNumerator = (Integer.parseInt(secondWhole) * Integer.parseInt(secondDenominator) + Integer.parseInt(secondNumerator)) * Integer.parseInt(firstDenominator); 
+    		outputNumerator = outputFirstNumerator - outputSecondNumerator;
+    		outputDenominator = Integer.parseInt(secondDenominator) * Integer.parseInt(firstDenominator);
+    		return Integer.toString(outputNumerator) + "/" + Integer.toString(outputDenominator);
+    	}
+    
+  
         // TODO: Implement this function to produce the solution to the input
         // Checkpoint 1: Return the second operand.  Example "4/5 * 1_2/4" returns "1_2/4".
         // Checkpoint 2: Return the second operand as a string representing each part.
-        //               Example "4/5 * 1_2/4" returns "whole:1 numerator:2 denominator:4".
+        //               Example "4/5 * 1_2/4" returns "secondWhole:1 secondNumerator:2 secondDenominator:4".
         // Checkpoint 3: Evaluate the formula and return the result as a fraction.
         //               Example "4/5 * 1_2/4" returns "6/5".
         //               Note: Answer does not need to be reduced, but it must be correct.
