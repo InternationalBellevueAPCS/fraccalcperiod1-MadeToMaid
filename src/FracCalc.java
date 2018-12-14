@@ -41,7 +41,7 @@ public class FracCalc {
     	String secondNumerator;
     	String secondDenominator;
     	if ((firstNum.indexOf("_") != -1)) {
-    		firstWhole = firstNum.substring(0, firstNum.indexOf("_"));
+    		firstWhole = firstNum.substring(0, firstNum.indexOf("_"));                             // Here I break the input into it's respective parts
     	} else if ((firstNum.indexOf("_") == -1) && (firstNum.indexOf("/") != -1)) {
     		firstWhole = "0";
     	} else {
@@ -72,30 +72,103 @@ public class FracCalc {
     	int outputWhole;
     	int outputNumerator;
     	int outputDenominator;
+    	//The basic way this program works is by converting the input numbers into fractions
+    	//Once in fractions, doing the math is a matter of simple operations.
+    	//it calculates the final answer as an unreduced fraction which is then reduced and returned as a proper fraction.
+    	//The returned value needs to range between mixed, fraction and whole numbers so there is logic to do the right operations in the right situation
+    	//The return states also function similarly.
     	if (operation.equals("*")) {
-    		int outputFirstNumerator = Integer.parseInt(firstWhole) * Integer.parseInt(firstDenominator) + Integer.parseInt(firstNumerator);
-    		int outputSecondNumerator = Integer.parseInt(secondWhole) * Integer.parseInt(secondDenominator) + Integer.parseInt(secondNumerator);
+    		int outputFirstNumerator = Math.abs(Integer.parseInt(firstWhole) * Integer.parseInt(firstDenominator)) + Integer.parseInt(firstNumerator);
+    		int outputSecondNumerator = Math.abs(Integer.parseInt(secondWhole) * Integer.parseInt(secondDenominator)) + Integer.parseInt(secondNumerator);
     		outputNumerator = outputFirstNumerator * outputSecondNumerator;
+    		if ((Integer.parseInt(firstWhole) * Integer.parseInt(firstDenominator) + Integer.parseInt(firstNumerator) < 0) || ((Integer.parseInt(secondWhole) * Integer.parseInt(secondDenominator)) + Integer.parseInt(secondNumerator) < 0)) {
+    			if (!((Integer.parseInt(firstWhole) * Integer.parseInt(firstDenominator) + Integer.parseInt(firstNumerator) < 0) && ((Integer.parseInt(secondWhole) * Integer.parseInt(secondDenominator)) + Integer.parseInt(secondNumerator) < 0))) {
+    				if (Integer.parseInt(firstWhole) == 0 || Integer.parseInt(secondWhole) == 0) {
+    					outputNumerator = outputFirstNumerator * outputSecondNumerator;
+    				} else {
+    				outputNumerator = -outputFirstNumerator * outputSecondNumerator;
+    				}
+    			} else if ((firstNum.indexOf("_") == -1 && secondNum.indexOf("_") != -1) || (secondNum.indexOf("_") == -1 && firstNum.indexOf("_") != -1)) {
+    				outputNumerator = outputFirstNumerator * outputSecondNumerator;
+    			} else if ((Integer.parseInt(firstWhole) == 0 && Integer.parseInt(secondWhole) != 0) || (Integer.parseInt(secondWhole) == 0 && Integer.parseInt(firstWhole) != 0)) {
+    				outputNumerator = -outputFirstNumerator * outputSecondNumerator;
+    			} else {
+    				outputNumerator = outputFirstNumerator * outputSecondNumerator;
+        		}
+    		}
     		outputDenominator = Integer.parseInt(firstDenominator) * Integer.parseInt(secondDenominator);
-    		return Integer.toString(outputNumerator) + "/" + Integer.toString(outputDenominator);
+    		int gcd = greatestCommonDivisor(outputNumerator,outputDenominator);
+    		if (outputFirstNumerator * outputSecondNumerator == 0) {
+    			return "0";
+    		} else if (outputNumerator/outputDenominator == 0) {
+    			return Integer.toString(outputNumerator / gcd) + "/" + Integer.toString(outputDenominator / gcd);
+    		} else if (outputNumerator % outputDenominator == 0) {
+    			return Integer.toString(outputNumerator/outputDenominator);
+    		} else {
+    			return Integer.toString(outputNumerator/outputDenominator) + "_" + Integer.toString(Math.abs((outputNumerator % outputDenominator) / gcd)) + "/" + Integer.toString(outputDenominator / gcd);
+    		}
     	} else if (operation.equals("/")) {
-    		int outputFirstNumerator = Integer.parseInt(firstWhole) * Integer.parseInt(firstDenominator) + Integer.parseInt(firstNumerator);
-    		int outputSecondNumerator = Integer.parseInt(secondWhole) * Integer.parseInt(secondDenominator) + Integer.parseInt(secondNumerator);
+    		int outputFirstNumerator = Math.abs(Integer.parseInt(firstWhole) * Integer.parseInt(firstDenominator)) + Integer.parseInt(firstNumerator);
+    		int outputSecondNumerator = Math.abs(Integer.parseInt(secondWhole) * Integer.parseInt(secondDenominator)) + Integer.parseInt(secondNumerator);
     		outputNumerator = outputFirstNumerator * Integer.parseInt(secondDenominator);
+    		if ((Integer.parseInt(firstWhole) * Integer.parseInt(firstDenominator) + Integer.parseInt(firstNumerator) < 0) || ((Integer.parseInt(secondWhole) * Integer.parseInt(secondDenominator)) + Integer.parseInt(secondNumerator) < 0)) {
+    			if (!((Integer.parseInt(firstWhole) * Integer.parseInt(firstDenominator) + Integer.parseInt(firstNumerator) < 0) && ((Integer.parseInt(secondWhole) * Integer.parseInt(secondDenominator)) + Integer.parseInt(secondNumerator) < 0))) {
+    				if (Integer.parseInt(firstWhole) == 0 || Integer.parseInt(secondWhole) == 0) {
+    					outputNumerator = outputFirstNumerator * Integer.parseInt(secondDenominator);
+    				} else {
+    				outputNumerator = -outputFirstNumerator * Integer.parseInt(secondDenominator);
+    				}
+    			} else if ((firstNum.indexOf("_") == -1 && secondNum.indexOf("_") != -1) || (secondNum.indexOf("_") == -1 && firstNum.indexOf("_") != -1)) {
+    				outputNumerator = outputFirstNumerator * Integer.parseInt(secondDenominator);
+    			} else if ((Integer.parseInt(firstWhole) == 0 && Integer.parseInt(secondWhole) != 0) || (Integer.parseInt(secondWhole) == 0 && Integer.parseInt(firstWhole) != 0)) {
+    				outputNumerator = -outputFirstNumerator * Integer.parseInt(secondDenominator);
+    			} else {
+    				outputNumerator = outputFirstNumerator * Integer.parseInt(secondDenominator);
+        		}
+    		}
     		outputDenominator = Integer.parseInt(firstDenominator) * outputSecondNumerator;
-    		return Integer.toString(outputNumerator) + "/" + Integer.toString(outputDenominator);
+    		int gcd = greatestCommonDivisor(outputNumerator,outputDenominator);
+    		if (outputFirstNumerator / outputSecondNumerator == 0) {
+    			return "0";
+    		} else if (outputNumerator/outputDenominator == 0) {
+    			return Integer.toString(outputNumerator / gcd) + "/" + Integer.toString(outputDenominator / gcd);
+    		} else if (outputNumerator % outputDenominator == 0) {
+    			return Integer.toString(outputNumerator/outputDenominator);
+    		} else {
+    			return Integer.toString(outputNumerator/outputDenominator) + "_" + Integer.toString(Math.abs((outputNumerator % outputDenominator) / gcd)) + "/" + Integer.toString(outputDenominator / gcd);
+    		}
     	} else if (operation.equals("+")) {
-    		int outputFirstNumerator = (Integer.parseInt(firstWhole) * Integer.parseInt(firstDenominator) + Integer.parseInt(firstNumerator)) * Integer.parseInt(secondDenominator);
-    		int outputSecondNumerator = (Integer.parseInt(secondWhole) * Integer.parseInt(secondDenominator) + Integer.parseInt(secondNumerator)) * Integer.parseInt(firstDenominator); 
+    		int outputFirstNumerator = (Integer.parseInt(firstWhole) * Integer.parseInt(firstDenominator) + negative(Integer.parseInt(firstWhole)) * Integer.parseInt(firstNumerator)) * Integer.parseInt(secondDenominator);
+    		int outputSecondNumerator = (Integer.parseInt(secondWhole) * Integer.parseInt(secondDenominator) + negative(Integer.parseInt(secondWhole)) * Integer.parseInt(secondNumerator)) * Integer.parseInt(firstDenominator); 
     		outputNumerator = outputFirstNumerator + outputSecondNumerator;
+    		System.out.println(outputFirstNumerator);
+    		System.out.println(outputSecondNumerator);
     		outputDenominator = Integer.parseInt(secondDenominator) * Integer.parseInt(firstDenominator);
-    		return Integer.toString(outputNumerator) + "/" + Integer.toString(outputDenominator);
+    		int gcd = greatestCommonDivisor(outputNumerator,outputDenominator);
+    		if (outputFirstNumerator + outputSecondNumerator == 0) {
+    			return "0";
+    		} else if (outputNumerator/outputDenominator == 0) {
+    			return Integer.toString(outputNumerator / gcd) + "/" + Integer.toString(outputDenominator / gcd);
+    		} else if (outputNumerator % outputDenominator == 0) {
+    			return Integer.toString(outputNumerator/outputDenominator);
+    		} else {
+    			return Integer.toString(outputNumerator/outputDenominator) + "_" + Integer.toString(Math.abs((outputNumerator % outputDenominator) / gcd)) + "/" + Integer.toString(outputDenominator / gcd);
+    		}
     	} else {
-    		int outputFirstNumerator = (Integer.parseInt(firstWhole) * Integer.parseInt(firstDenominator) + Integer.parseInt(firstNumerator)) * Integer.parseInt(secondDenominator);
-    		int outputSecondNumerator = (Integer.parseInt(secondWhole) * Integer.parseInt(secondDenominator) + Integer.parseInt(secondNumerator)) * Integer.parseInt(firstDenominator); 
+    		int outputFirstNumerator = (Integer.parseInt(firstWhole) * Integer.parseInt(firstDenominator) + negative(Integer.parseInt(firstWhole)) * Integer.parseInt(firstNumerator)) * Integer.parseInt(secondDenominator);
+    		int outputSecondNumerator = (Integer.parseInt(secondWhole) * Integer.parseInt(secondDenominator) + negative(Integer.parseInt(secondWhole)) * Integer.parseInt(secondNumerator)) * Integer.parseInt(firstDenominator); 
     		outputNumerator = outputFirstNumerator - outputSecondNumerator;
     		outputDenominator = Integer.parseInt(secondDenominator) * Integer.parseInt(firstDenominator);
-    		return Integer.toString(outputNumerator) + "/" + Integer.toString(outputDenominator);
+    		int gcd = greatestCommonDivisor(outputNumerator,outputDenominator);
+    		if (outputFirstNumerator - outputSecondNumerator == 0) {
+    			return "0";
+    		} else if (outputNumerator/outputDenominator == 0) {
+    			return Integer.toString(outputNumerator / gcd) + "/" + Integer.toString(outputDenominator / gcd);
+    		} else if (outputNumerator % outputDenominator == 0) {
+    			return Integer.toString(outputNumerator/outputDenominator);
+    		} else {
+    			return Integer.toString(outputNumerator/outputDenominator) + "_" + Integer.toString(Math.abs((outputNumerator % outputDenominator) / gcd)) + "/" + Integer.toString(outputDenominator / gcd);
+    		}
     	}
     
   
@@ -121,6 +194,15 @@ public class FracCalc {
      * @param b - Second integer.
      * @return The GCD.
      */
+    
+    // negative just returns whether a number is negative, with 0 returning as 1 for my programs purpose
+    public static int negative(int a) {
+    	if (a >= 0) {
+    		return 1;
+    	} else {
+    		return -1;
+    	}
+    }
     public static int greatestCommonDivisor(int a, int b)
     {
         a = Math.abs(a);
